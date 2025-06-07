@@ -1,0 +1,6 @@
+@ObjectTraffic_HostAddress = http://localhost:5034
+
+GET {{ObjectTraffic_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
