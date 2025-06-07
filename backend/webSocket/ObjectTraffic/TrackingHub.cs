@@ -4,9 +4,9 @@ namespace ObjectTraffic
 {
     public class TrackingHub : Hub
     {
-        public async Task ReceiveCoordinates(string user, TrackingCoordinates trackingCoordinates)
+        public async Task ReceiveCoordinates(User  user)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, trackingCoordinates);
+            await Clients.All.SendAsync("ReceiveMessage",user.user,  user.Coordinates);
         }
 
     }
