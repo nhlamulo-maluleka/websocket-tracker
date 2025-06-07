@@ -1,11 +1,12 @@
-import { mapPosition } from "./maps.js";
+import { mapPosition, newMarker } from "./maps.js";
 
 export class Socket {
   connection = null;
   _connected = false;
   connectionId = null;
+  userPositions = [];
 
-  constructor(socketUrl) {
+  constructor(socketUrl, coords, marker) {
     this.connection = new signalR.HubConnectionBuilder()
       .withUrl(socketUrl)
       .withAutomaticReconnect()
@@ -24,6 +25,7 @@ export class Socket {
         this.connection.on("connection", (data) => {
           console.log(data);
           this.connectionId = data;
+          this.sendPosition(coords, marker);
         });
       })
       .catch((err) => console.log("SignalR Connection Error:", err));
@@ -31,19 +33,25 @@ export class Socket {
 
   sendPosition = (position, marker) => {
     marker?.setPosition(mapPosition(position));
-    if (this._connected && this.connection) {
-      this.connection.invoke("UserPosition", {
-        user: this.connectionId,
-        coordinates: position,
-      });
-    }
+    this.connection?.invoke("UserPosition", {
+      user: this.connectionId,
+      coordinates: position,
+    });
   };
 
   listen = (map) => {
-    if (this._connected && this.connection) {
-      this.connection.on("UpdatedPositions", (data) => {
-        console.log(data);
-      });
-    }
+    this.connection?.on("updatedpositions", (data) => {
+      console.log(data);
+      if (data) {
+        this.userPositions.forEach((pos) => pos?.setMap(null));
+        Object.keys(data).forEach((key) => {
+          if (key !== this.connectionId) {
+            this.userPositions.push(
+              newMarker(mapPosition(data[key].coordinates))
+            );
+          }
+        });
+      }
+    });
   };
 }

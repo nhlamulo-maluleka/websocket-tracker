@@ -9,15 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<ConnectionManager>();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost5500", policy =>
+    options.AddDefaultPolicy(policy =>
     {
         policy
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins("http://127.0.0.1:5500");
+            .WithOrigins("https://sp6k4xqn-5500.inc1.devtunnels.ms");
     });
 });
 
@@ -30,7 +31,7 @@ var app = builder.Build();
 //    app.UseSwagger();
 //    app.UseSwaggerUI();
 //}
-app.UseCors("AllowLocalhost5500");
+app.UseCors();
 
 // app.UseHttpRedirection();
 app.UseAuthorization();

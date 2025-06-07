@@ -1,7 +1,7 @@
 import { initMap } from "./maps.js";
 import { Socket } from "./socket.js";
 
-const webSocket = new Socket(window.ENV?.SOCKER_SERVER_URL);
+let webSocket = null;
 
 if (!navigator.geolocation) {
   alert("Geolocation is not supported by this browser.");
@@ -10,8 +10,12 @@ if (!navigator.geolocation) {
     ({ coords }) => {
       console.log(coords);
       const [map, marker] = initMap(coords);
-      webSocket.sendPosition(coords, marker);
-      webSocket.listen(map);
+
+      if (!webSocket) {
+        webSocket = new Socket(window.ENV?.SOCKER_SERVER_URL, coords, marker);
+      }
+      webSocket?.sendPosition(coords, marker);
+      webSocket?.listen(map);
     },
     (error) => {
       console.error("Geolocation Error", error);
