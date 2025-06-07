@@ -1,12 +1,11 @@
 {
   "Version": 1,
-  "Hash": "V3mda3WP22oJRlUUNaxfgUvi5/FWyrIQISIAKMSPNDU=",
+  "Hash": "S4r8JvfjhPaZ+tZMjk7YjObqfaVg08QHJxTUurQX3S0=",
   "Source": "ObjectTraffic",
   "BasePath": "_content/ObjectTraffic",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "Assets": []
 }

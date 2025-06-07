@@ -11,15 +11,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowLocalhost5500", policy =>
     {
         policy
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .SetIsOriginAllowed(_ => true);
+            .WithOrigins("http://127.0.0.1:5500");
     });
 });
+
 
 var app = builder.Build();
 
@@ -29,11 +30,11 @@ var app = builder.Build();
 //    app.UseSwagger();
 //    app.UseSwaggerUI();
 //}
+app.UseCors("AllowLocalhost5500");
 
-app.UseHttpsRedirection();
-
+// app.UseHttpRedirection();
 app.UseAuthorization();
+// app.MapControllers();
 app.MapHub<TrackingHub>("/tracking");
-//app.MapControllers();
 
 app.Run();
